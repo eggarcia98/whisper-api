@@ -5,11 +5,14 @@ import whisper
 app = Flask(__name__)
 
 # Load the Whisper model
-model = whisper.load_model("base")
+# model = None
 
 
 @app.route("/upload-audio", methods=["POST"])
 def upload_audio():
+
+    model = whisper.load_model("base")
+
     if "file" not in request.files:
         return jsonify({"error": "No file part in the request"}), 400
 
