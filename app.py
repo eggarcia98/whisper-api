@@ -1,17 +1,24 @@
-from flask import Flask, request, jsonify
+""" Flask app to transcribe audio files using Whisper """
+
 import os
+
 import whisper
+from flask import Flask, jsonify, request
+from flask_cors import cross_origin
 
 app = Flask(__name__)
+model_name = os.environ.get("MODEL_NAME", "turbo")
 
 # Load the Whisper model
 # model = None
 
 
-@app.route("/upload-audio", methods=["POST"])
-def upload_audio():
+@app.route("/get-transcript-audio", methods=["POST"])
+@cross_origin("*")
+def get_transcript_audio():
+    """Get the transcription of an audio file"""
 
-    model = whisper.load_model("turbo")
+    model = whisper.load_model(model_name)
 
     if "file" not in request.files:
         return jsonify({"error": "No file part in the request"}), 400
